@@ -1,5 +1,12 @@
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
+from sumy.summarizers.edmundson import EdmundsonSummarizer
+from sumy.summarizers.luhn import LuhnSummarizer
+from sumy.summarizers.text_rank import TextRankSummarizer
+from sumy.summarizers.sum_basic import SumBasicSummarizer
+from sumy.summarizers.kl import KLSummarizer
+from sumy.summarizers.random import RandomSummarizer
+
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 
@@ -18,9 +25,58 @@ def _lex_rank_summarizer(text, sentence_len):
         print(sentence)
 
 
+def _edmundson_summarizer(text, sentence_len):
+    summarizer = EdmundsonSummarizer()
+    summary = summarizer(text.document, sentence_len)
+    for sentence in summary:
+        print(sentence)
+
+
+def _luhn_summarizer(text, sentence_len):
+    summarizer = LuhnSummarizer()
+    summary = summarizer(text.document, sentence_len)
+    for sentence in summary:
+        print(sentence)
+
+
+def _text_rank_summarizer(text, sentence_len):
+    summarizer = TextRankSummarizer()
+    summary = summarizer(text.document, sentence_len)
+    for sentence in summary:
+        print(sentence)
+
+
+def _sum_basic_summarizer(text, sentence_len):
+    summarizer = SumBasicSummarizer()
+    summary = summarizer(text.document, sentence_len)
+    for sentence in summary:
+        print(sentence)
+
+
+def _kl_summarizer(text, sentence_len):
+    summarizer = KLSummarizer()
+    summary = summarizer(text.document, sentence_len)
+    for sentence in summary:
+        print(sentence)
+
+
+def _random_summarizer(text, sentence_len):
+    summarizer = RandomSummarizer()
+    summary = summarizer(text.document, sentence_len)
+    for sentence in summary:
+        print(sentence)
+
+
 def summarize_article(article, mode, sentence_len=2, lang='english'):
     summarize_funcs = {'lsa': _lsa_summarizer,
-                       'lex_rank': _lex_rank_summarizer}
+                       'lex_rank': _lex_rank_summarizer,
+                       'edmundson': _edmundson_summarizer,
+                       'luhn': _luhn_summarizer,
+                       'text_rank': _text_rank_summarizer,
+                       'sum_basic': _sum_basic_summarizer,
+                       'kl': _kl_summarizer,
+                       'random': _random_summarizer,
+                       }
     article = PlaintextParser.from_string(article, Tokenizer(lang))
     summarize_funcs[mode](article, sentence_len)
 
@@ -44,5 +100,5 @@ if __name__ == '__main__':
        highly resolve that these dead shall not have died in vain that this nation, under God, shall have a new birth 
        of freedom and that government of the people, by the people, for the people, shall not perish from the earth."""
 
-    #text = PlaintextParser.from_string(text, Tokenizer("english"))
+    # text = PlaintextParser.from_string(text, Tokenizer("english"))
     summarize_article(article, 'lsa', sentence_len=2, lang='english')
